@@ -17,7 +17,8 @@ import {
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-regular-svg-icons/faUser";
-import Categories from "../components/categories";
+import Categories from "../components/Categories";
+import FeaturedRow from "../components/FeaturedRow";
 
 // import { faMugSaucer } from '@fortawesome/free-solid-svg-icons/faMugSaucer'
 
@@ -79,6 +80,25 @@ export default function HomeScreen() {
       <ScrollView>
         {/* category  */}
         <Categories />
+
+        {/* feature rows  */}
+        <FeaturedRow
+          id="123"
+          title="Featured"
+          description="Paid placements from our partners"
+        />
+        {/* tasty discounts  */}
+        <FeaturedRow
+          id="1234"
+          title="Tasty Discount"
+          description="Everyone's benn enjoying these juicy discounts!"
+        />
+        {/* offers near you  */}
+        <FeaturedRow
+          id="12345"
+          title="Offers near you!"
+          description="Why not support your local restaurant tonight!"
+        />
       </ScrollView>
     </SafeAreaView>
   );
