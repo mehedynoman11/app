@@ -9,10 +9,6 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      {/* <View className="bg-yellow-400">
-        <Text className="text-[15px]">Background Changed 2</Text>
-        <StatusBar style="auto" />
-      </View> */}
       <Stack.Navigator>
         <Stack.Screen name="Home" component={HomeScreen} />
       </Stack.Navigator>
