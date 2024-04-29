@@ -1,3 +1,5 @@
+// "use client";
+
 import {
   View,
   Text,
@@ -6,7 +8,7 @@ import {
   TextInput,
   ScrollView,
 } from "react-native";
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 // import { ChevronDownIcon } from "react-native-heroicons/solid";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -19,10 +21,12 @@ import {
 import { faUser } from "@fortawesome/free-regular-svg-icons/faUser";
 import Categories from "../components/Categories";
 import FeaturedRow from "../components/FeaturedRow";
-
-// import { faMugSaucer } from '@fortawesome/free-solid-svg-icons/faMugSaucer'
+import sanityClient from "../sanity";
+// import { createClient } from "@sanity/client";
+// import category from "../sanity/schemaTypes/category";
 
 export default function HomeScreen() {
+  const [featuredCategories, setFeaturedCategories] = useState([]);
   const navigation = useNavigation();
 
   useLayoutEffect(() => {
@@ -30,6 +34,25 @@ export default function HomeScreen() {
       headerShown: false,
     });
   }, []);
+
+  useEffect(() => {
+    sanityClient
+      .fetch(
+        `
+        *[_type == "featured"] {
+          ...,
+          restaurants[]-> {
+            ...,
+            dishes[]->
+          }
+    }`
+      )
+      .then((data) => {
+        setFeaturedCategories(data);
+      });
+  }, []);
+
+  // console.log(featuredCategories);
 
   return (
     <SafeAreaView className="bg-white pt-6">
@@ -45,9 +68,6 @@ export default function HomeScreen() {
           <Text className="font-bold text-gray-400 text-xs">Deliver Now!</Text>
           <Text className="font-bold text-xl">
             Current Location
-            {/* <ChevronDownIcon size={20} color="#00ccvc" /> */}
-            {/* < size={20} color="#00ccbb" />
-             */}{" "}
             <FontAwesomeIcon
               icon={faArrowAltCircleDown}
               style={{ color: "green" }}
@@ -56,7 +76,6 @@ export default function HomeScreen() {
           </Text>
         </View>
         <FontAwesomeIcon icon={faUser} style={{ color: "blue" }} size={34} />
-        {/* <Icons.UserIcon size={35} color="#00ccbb" /> */}
       </View>
 
       {/* search  */}
@@ -82,6 +101,16 @@ export default function HomeScreen() {
         <Categories />
 
         {/* feature rows  */}
+
+        {featuredCategories?.map((category) => (
+          <FeaturedRow
+            key={category._id}
+            id={category._id}
+            title={category.name}
+            description={category.short_description}
+          />
+        ))}
+
         <FeaturedRow
           id="123"
           title="Featured"
